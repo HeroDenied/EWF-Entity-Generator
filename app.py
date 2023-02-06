@@ -5,8 +5,19 @@ from src import new_entity
 
 
 def Get_Txt_File():
-    txt_file = filedialog.askopenfilename(
-        title='Txt do SQL', filetypes=(('Arquivo de Texto', '*txt'),))
+    try:
+        txt_file = filedialog.askopenfilename(
+            title='Txt do SQL', filetypes=(('Arquivo de Texto', '*txt'),))
+        if txt_file == '':
+            raise FileNotFoundError
+    except FileNotFoundError:
+        messagebox.showerror('ERRO', 'Nenhum arquivo selecionado!')
+        answer = messagebox.askyesno(
+            'INFO', 'Ainda deseja selecionar um arquivo?')
+        if answer:
+            txt_file = Get_Txt_File()
+        else:
+            exit()
     return txt_file
 
 
@@ -49,40 +60,39 @@ def Clear_Input(file_name: str):
     return clear_data
 
 
-def Extract_Data(sql_data):
+def Extract_Data(sql_data, class_name):
     var_list = []
+    enti_obj = new_entity.java_entity()
+    enti_obj.class_name = class_name
     for n, i in enumerate(sql_data):
+        var_obj = new_entity.java_variable()
         sql_row = Remove_Empty(i.split(' '))
-        var_obj = new_entity.java_entity()
         if n != 0:
             var_obj.SetVariable(sql_row)
-            # print(
-            #     '{:^10} | {:^10} | {:^10} | {:^10}'.format(
-            #         str(var_obj.var_name),
-            #         str(var_obj.var_type),
-            #         str(var_obj.var_size),
-            #         str(var_obj.constrai)
-            #     )
-            # )
-        else:
-            var_obj.database = sql_row[2]
-            var_obj.dt_Table = sql_row[3]
-            # print(
-            #     '\n{:^10} | {:^10}'.format(
-            #         str(var_obj.database),
-            #         str(var_obj.dt_Table)
-            #     )
-            # )
 
+        else:
+            enti_obj.dtb_schema = sql_row[2]
+            enti_obj.data_Table = sql_row[3]
+
+        enti_obj.varia_list.append(var_obj)
         var_list.append(var_obj)
-    return var_list
+    return var_list, enti_obj
+
+
+def WriteScript(text: str, name: str):
+    '''Pergunta onde quer salvar e Cria/Sobrescreve arquivo .java'''
+    where = filedialog.askdirectory(initialdir='./', title='Salvar Script')
+    with open(f'{where}/{name}.java', 'w') as f:
+        f.write(text)
 
 
 if __name__ == '__main__':
     input_file = Get_Txt_File()
+    class_name = input("Insira o nome da Classe: ")
     clear_data = Clear_Input(input_file)
-    var_list = Extract_Data(clear_data)
+    var_list, entity_obj = Extract_Data(clear_data, class_name)
 
-    for n, i in enumerate(var_list):
-        if n != 0:
-            print(i.VarConstructor())
+    script_content = entity_obj.EntityConstructor()
+
+    Tk().withdraw()
+    WriteScript(script_content, class_name)
