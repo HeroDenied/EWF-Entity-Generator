@@ -49,34 +49,40 @@ def Clear_Input(file_name: str):
     return clear_data
 
 
-if __name__ == '__main__':
-    input_file = Get_Txt_File()
-    clear_data = Clear_Input(input_file)
-
+def Extract_Data(sql_data):
     var_list = []
-    for n, i in enumerate(clear_data):
+    for n, i in enumerate(sql_data):
         sql_row = Remove_Empty(i.split(' '))
         var_obj = new_entity.java_entity()
         if n != 0:
             var_obj.SetVariable(sql_row)
-            print(
-                '{:^10} | {:^10} | {:^10} | {:^10}'.format(
-                    str(var_obj.var_name),
-                    str(var_obj.var_type),
-                    str(var_obj.var_size),
-                    str(var_obj.constrai)
-                )
-            )
+            # print(
+            #     '{:^10} | {:^10} | {:^10} | {:^10}'.format(
+            #         str(var_obj.var_name),
+            #         str(var_obj.var_type),
+            #         str(var_obj.var_size),
+            #         str(var_obj.constrai)
+            #     )
+            # )
         else:
             var_obj.database = sql_row[2]
             var_obj.dt_Table = sql_row[3]
-            print(
-                '\n{:^10} | {:^10}'.format(
-                    str(var_obj.database),
-                    str(var_obj.dt_Table)
-                )
-            )
+            # print(
+            #     '\n{:^10} | {:^10}'.format(
+            #         str(var_obj.database),
+            #         str(var_obj.dt_Table)
+            #     )
+            # )
 
         var_list.append(var_obj)
+    return var_list
 
-    print(var_list)
+
+if __name__ == '__main__':
+    input_file = Get_Txt_File()
+    clear_data = Clear_Input(input_file)
+    var_list = Extract_Data(clear_data)
+
+    for n, i in enumerate(var_list):
+        if n != 0:
+            print(i.VarConstructor())
