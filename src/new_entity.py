@@ -77,14 +77,14 @@ class java_entity():
         param_size = ''
         for i in self.varia_list:
             if i.var_type == 'Long':
-                param_size = f'@max({i.var_size})'
+                param_size = f'@Max({i.var_size})'
             elif i.var_type != 'Date':
                 param_size = f'@Length(max={i.var_size})'
 
             contr = '\n'.join([
                 '\t@NotNull',
                 f'\t{param_size}',
-                f'\t@Colunm(name="{i.var_colu}")'
+                f'\t@Column(name="{i.var_colu}")'
             ])
             var_build = i.VarConstructor()
             if '  ;' not in var_build:
