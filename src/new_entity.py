@@ -100,6 +100,10 @@ class java_entity():
             'import javax.persistence.Entity;',
             'import javax.persistence.Id;',
             'import javax.persistence.Table;',
+            'import javax.persistence.GenerationType;',
+            'import javax.persistence.GeneratedValue;',
+            'import javax.persistence.SequenceGenerator;',
+            'import javax.validation.constraints.NotNull;',
             'import javax.validation.constraints.Max;\n',
             'import org.hibernate.validator.constraints.Length;\n'
         ])
