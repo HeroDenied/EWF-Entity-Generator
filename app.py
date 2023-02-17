@@ -96,3 +96,4 @@ if __name__ == '__main__':
 
     Tk().withdraw()
     WriteScript(script_content, class_name)
+    input('Programa finalizado!\nPressione [ENTER] para fechar o programa!')

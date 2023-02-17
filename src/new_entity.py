@@ -59,6 +59,8 @@ class java_variable():
             self.constrai = self.TranslateConstraint(row[3:5])
         except ValueError:
             self.constrai = self.TranslateConstraint(row[2:4])
+        except IndexError:
+            self.constrai = ''
 
     def VarConstructor(self):
         return f'{self.transpar} {self.var_type} {self.var_name};'
