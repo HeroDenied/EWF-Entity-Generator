@@ -14,7 +14,7 @@ java_var_types = {
     'bigint': 'Long',
     'date': 'Date',
     'object': 'ObjectName',
-    'decimal': 'BigDecimal',
+    'decimal': 'Bigdecimal',
     'timestamp': 'Date',
 }
 
